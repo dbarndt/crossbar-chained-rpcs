@@ -8,10 +8,6 @@ env = "development"
 
 app.config.from_object("server_config.Config" + env.capitalize())
 
-from flask.ext.compress import Compress
-
-Compress(app)
-
 @app.route("/")
 def index():
     return render_template(
@@ -21,4 +17,3 @@ def index():
                 "roles": ["ljop", "ljadmin"],
                 "role": "ljadmin",
                 "role_default": "ljop"})
-
