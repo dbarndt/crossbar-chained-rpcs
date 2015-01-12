@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+<title>LoJack RTU5 Manager</title>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+
+<!-- Load tool Javascript files. -->
+<script src="{{ url_for('static', filename='jquery/jquery-1.11.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='autobahn/autobahn-0.9.5.min.js') }}"></script>
+
+<!-- Create an RTU5 namespace. -->
+<script>
+var LoJack = {
+	RTU5: {
+		app: {
+			realm: "{{ ctx['realm'] }}",
+			roles: {
+				all: {{ ctx['roles']|tojson|safe }},
+				current: "{{ ctx['role'] }}",
+				"default": "{{ ctx['role_default'] }}"
+			}
+		}
+	}
+},
+RTU5 = LoJack.RTU5;
+</script>
+
+<!-- Load application Javascript files. -->
+<script src="{{ url_for('static', filename='rtu5/js/rtu5-web.js') }}"></script>
+
+<!-- Page initialization. -->
+<script>
+$(document).ready( RTU5.web.init );
+</script>
+
+</body>
+</html>
+

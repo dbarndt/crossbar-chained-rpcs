@@ -1,0 +1,164 @@
+{
+   "controller": {
+   },
+   "workers": [
+      {
+         "id": "crossbar",
+         "type": "router",
+         "options": {
+            "pythonpath": [
+               "../server",
+               "../api"
+            ]
+         },
+         "realms": [
+            {
+               "id": "XX",
+               "name": "XX",
+               "roles": [
+                  {
+                     "id": "application",
+                     "name": "application",
+                     "permissions": [
+                        {
+                           "uri": "*",
+                           "register": true,
+                           "call": true,
+                           "publish": true,
+                           "subscribe": true
+                        }
+                     ]
+                  },
+                  {
+                     "id": "authenticator",
+                     "name": "authenticator",
+                     "permissions": [
+                        {
+                           "uri": "com.lojack.wamp.proc.v1.authenticate",
+                           "register": true
+                        }
+                     ]
+                  },
+                  {
+                     "id": "ljop",
+                     "name": "ljop",
+                     "permissions": [
+                        {
+                           "uri": "com.lojack.rtu.proc.v1.read",
+                           "call": true
+                        },
+                        {
+                           "uri": "com.lojack.rtu.topic.v1.*",
+                           "subscribe": true
+                        }
+                     ]
+                  },
+                  {
+                     "id": "ljadmin",
+                     "name": "ljadmin",
+                     "permissions": [
+                        {
+                           "uri": "*",
+                           "register": true,
+                           "call": true,
+                           "publish": true,
+                           "subscribe": true
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "id": "ipc",
+               "name": "ipc",
+               "roles": [
+                  {
+                     "id": "anonymous",
+                     "name": "anonymous",
+                     "permissions": [
+                        {
+                           "uri": "*",
+                           "register": true,
+                           "call": true,
+                           "publish": true,
+                           "subscribe": true
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "transports": [
+            {
+               "id": "web",
+               "type": "web",
+               "endpoint": {
+                  "type": "tcp",
+                  "port": 8080
+               },
+               "paths": {
+                  "/": {
+                     "type": "wsgi",
+                     "module": "server_app",
+                     "object": "app"
+                  },
+                  "api": {
+                     "type": "websocket",
+                     "auth": {
+                        "ticket": {
+                           "type": "dynamic",
+                           "authenticator": "com.lojack.wamp.proc.v1.authenticate"
+                        }
+                     },
+                     "options": {
+                        "enable_webstatus": false,
+                        "enable_hixie76": false,
+                        "max_frame_size": 1048576,
+                        "max_message_size": 1048576,
+                        "auto_fragment_size": 65536,
+                        "fail_by_drop": true,
+                        "open_handshake_timeout": 2500,
+                        "close_handshake_timeout": 1000,
+                        "auto_ping_interval": 10000,
+                        "auto_ping_timeout": 5000,
+                        "auto_ping_size": 4,
+                        "compression": {
+                           "deflate": {
+                              "request_no_context_takeover": false,
+                              "request_max_window_bits": 11,
+                              "no_context_takeover": false,
+                              "max_window_bits": 11,
+                              "memory_level": 4
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         ],
+         "components": [
+            {
+               "id": "application",
+               "type": "class",
+               "classname": "api_app.Application",
+               "realm": "XX",
+               "role": "application"
+            },
+            {
+               "id": "authenticator",
+               "type": "class",
+               "classname": "api_auth.Authenticator",
+               "realm": "XX",
+               "role": "authenticator"
+            },
+            {
+               "id": "ipc",
+               "type": "class",
+               "classname": "api_ipc.Server",
+               "realm": "ipc"
+            }
+         ]
+      }
+   ]
+}
+
