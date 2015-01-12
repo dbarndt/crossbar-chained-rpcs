@@ -3,8 +3,9 @@ Problem statement:
 When trying to chain WAMP RPC calss across realms, errors are encountered when trying to run an ApplicatioRunner to connect to / access the second realm.
 
 Project notes:
+- Code has been run with latest Crossbar.io (0.10.0) and AutobahnPython (0.9.5).
 - api contains the Crossbar.io config and WAMP code.
-- server contains a Flask single-page web app that uses AutobahnJS to call the WAMP code upon page load. Should only require the main Flask package.
+- server contains a Flask single-page web app that uses AutobahnJS (0.9.5) to call the WAMP code upon page load. Should only require the main Flask package.
 - IP port for both api and server is 8080.
 - To simplify things:
   - SSL/TLS has been removed; "http://localhost:8080" and "ws://localhost:8080/api" are the URLs for server and api, respectively.
